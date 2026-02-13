@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XiaoXingOS - 简单好用的操作系统</title>
+    <style>
+        /* 重置样式 */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            /* 添加全局过渡，让颜色变化更顺滑 */
+            transition: all 0.3s ease; 
+        }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6; 
+            color: #333; 
+            background-color: #f8f9fa; 
+            /* 设置背景为白色，方便观察动画 */
+            background: #fff;
+        }
+        a { 
+            text-decoration: none; 
+            color: inherit; 
+            /* 链接悬停变色动画 */
+            transition: color 0.3s ease;
+        }
+        ul { list-style: none; }
+
+        /* 导航栏 */
+        header { 
+            background: #fff; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 1000; 
+            /* 添加导航栏悬停阴影变化 */
+            transition: box-shadow 0.3s ease;
+        }
+        header:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .container { 
+            width: 90%; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 1rem 0; 
+        }
+        .logo { 
+            font-size: 1.5rem; 
+            font-weight: bold; 
+            color: #007BFF; 
+        }
+
+        /* 首屏大图 */
+        .hero { 
+            padding: 100px 0 80px; 
+            text-align: center; 
+            background: #fff; 
+        }
+        .hero h1 { 
+            font-size: 2.5rem; 
+            margin-bottom: 1rem; 
+            color: #111; 
+            /* 标题入场动画 */
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        .hero p { 
+            font-size: 1.2rem; 
+            color: #666; 
+            max-width: 700px; 
+            margin: 0 auto 2rem; 
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+        }
+        
+        /* 按钮动画 */
+        .btn { 
+            display: inline-block; 
+            padding: 12px 30px; 
+            background: #007BFF; 
+            color: #fff; 
+            border-radius: 5px; 
+            font-weight: 500; 
+            margin: 0 10px;
+            /* 悬停放大效果 */
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+        .btn:hover { 
+            background: #0056b3; 
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        /* 功能介绍 */
+        .features { 
+            padding: 80px 0; 
+            background: #fff; 
+        }
+        .section-title { 
+            text-align: center; 
+            margin-bottom: 60px; 
+            font-size: 2rem; 
+            color: #111; 
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+        }
+        
+        /* 卡片悬停动画 */
+        .features-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 20px; 
+        }
+        .feature-card { 
+            background: #f8f9fa; 
+            padding: 30px; 
+            border-radius: 12px; 
+            text-align: center; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            /* 卡片悬停提升 */
+            transition: all 0.3s ease;
+            transform: translateY(0);
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background: #fff;
+            border: 1px solid #eee;
+        }
+        .feature-icon { 
+            font-size: 3rem; 
+            margin-bottom: 1rem; 
+            display: block; 
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        /* 截图展示 */
+        .screenshots { 
+            padding: 80px 0; 
+            background: #f8f9fa; 
+        }
+        .screenshot-container { 
+            display: flex; 
+            justify-content: center; 
+            flex-wrap: wrap; 
+            gap: 30px; 
+            margin-top: 30px; 
+        }
+        .screenshot-container img { 
+            width: 280px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.6s forwards;
+        }
+        .screenshot-container img:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            z-index: 1;
+        }
+
+        /* 底部 */
+        footer { 
+            text-align: center; 
+            padding: 50px 0 30px; 
+            background: #333; 
+            color: #fff; 
+            margin-top: 60px; 
+        }
+        footer a:hover {
+            color: #007BFF;
+            transform: scale(1.05);
+        }
+
+        /* 动画关键帧定义 */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .container { flex-direction: column; }
+            /* 移动端禁用部分动画以防卡顿 */
+            .feature-card, .screenshot-container img {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <div class="logo">XiaoXingOS1.7</div>
+            <nav>
+                <ul style="display: flex; gap: 20px;">
+                    <li><a href="#home">首页</a></li>
+                    <li><a href="#features">功能</a></li>
+                    <li><a href="#screenshots">截图</a></li>
+                    <li><a href="#download">下载</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 首屏大图 -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>XiaoXingOS1.7</h1>
+            <p>这就是一个名字叫“小星”的操作系统。简单、直接、不折腾。</p>
+            <a href="#download" class="btn">立即下载</a>
+            <a href="#features" class="btn" style="background: #6c757d;">了解更多</a>
+        </div>
+    </section>
+
+    <!-- 核心功能 -->
+    <section id="features" class="features">
+        <h2 class="section-title">核心功能</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">⚡</span>
+                <h3>极简内核</h3>
+                <p>代码精简，运行流畅，不占用多余资源，老手机也能跑得飞快。</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🛡️</span>
+                <h3>基础配置</h3>
+                <p>自带好用的虚拟机专用Magisk。</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🔄</span>
+                <h3>兼容性强</h3>
+                <p>支持主流手机，安装即用，省去配置烦恼。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 系统截图 -->
+    <section id="screenshots" class="screenshots">
+        <div class="container">
+            <h2 class="section-title">系统截图</h2>
+            <div class="screenshot-container">
+                <img src="https://a1.qpic.cn/psc?/V50czCOR2R4crz0fJDtA1VMAz64R2eiu/IoAt0TAZs8Yc38Jr9jGXIRiHilizN3ODV1.UEx0YkqG8KZ8HZ.WnCaaLcnBEnCPU9RFsyXsrFpPxFhbgdUbgIQ!!/b&ek=1&kp=1&pt=0&bo=KwGIAisBiAIWADA!&tl=1&vuin=2598054322&tm=1770627600&dis_t=1770628964&dis_k=e599c32709cda2d6e78582d7631bb542&sce=50-1-1&rf=viewer_311" alt="截图1">
+                <img src="https://a1.qpic.cn/psc?/V50czCOR2R4crz0fJDtA1VMAz64R2eiu/IoAt0TAZs8Yc38Jr9jGXIf3llFrx9JUwK1yZMIMoJCvVWnFD2Wq..cD2nCT7MYkawHZJiUsSBIt7O11mJ1V2FQ!!/b&ek=1&kp=1&pt=0&bo=KwGIAisBiAIWADA!&tl=1&vuin=2598054322&tm=1770627600&dis_t=1770628964&dis_k=745a3e5cda9d62395e5e1fa8462248a8&sce=50-1-1&rf=viewer_311" alt="截图2">
+                <img src="https://a1.qpic.cn/psc?/V50czCOR2R4crz0fJDtA1VMAz64R2eiu/bqQfVz5yrrGYSXMvKr.cqf347zgQJ4rR4gCUAk00Tt32IJdx67eIGrRQNf4eqeKzJLEvDZjg9FQW..O7iP8yzJo.yzi4aI8BmnjAmiK8vO8!/b&ek=1&kp=1&pt=0&bo=KwGIAisBiAIWADA!&tl=1&vuin=2598054322&tm=1770627600&dis_t=1770628961&dis_k=5ae64f289b4ff9b5191303088d72eedd&sce=60-4-3&rf=viewer_311" alt="截图3">
+            </div>
+        </div>
+    </section>
+
+    <!-- 下载 -->
+    <section id="download" class="hero">
+        <div class="container">
+            <h2>准备好了吗？</h2>
+            <p>https://www.123865.com/s/tpxzVv-3PUgA </p>
+            <a href="#" class="btn">下载ROM (zip)</a>
+            <a href="#" class="btn" style="background: #28a745;">查看安装教程</a>
+        </div>
+    </section>
+
+    <!-- 底部 -->
+    <footer>
+        <div class="container" style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+            <p>© 2025 小星OS. 保留所有权利.</p>
+            
+            <!-- 社交链接 -->
+            <div class="social-links" style="display: flex; gap: 25px; font-size: 1.2rem; color: #fff;">
+                <a href="https://space.bilibili.com/3461565690939610" target="_blank" style="color: #fff; text-decoration: none; display: flex; align-items: center; gap: 5px;">
+                    <svg t="1640000000000" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2280" width="20" height="20">
+                        <path d="M512 0C229.2 0 0 229.2 0 512s229.2 512 512 512 512-229.2 512-512S794.8 0 512 0z m0 928C282.4 928 96 741.6 96 512S282.4 96 512 96s416 186.4 416 416-186.4 416-416 416z" fill="#FFB6C1" p-id="2281"></path>
+                        <path d="M368 368h-64v352c0 8.8-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16h64c8.8 0 16 7.2 16 16v32h32v-32c0-8.8 7.2-16 16-16zM544 368h-64v352c0 8.8-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16h64c8.8 0 16 7.2 16 16v32h32v-32c0-8.8 7.2-16 16-16z" fill="#FFB6C1" p-id="2282"></path>
+                        <path d="M672 368h-64v352c0 8.8-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16h64c8.8 0 16 7.2 16 16v32h32v-32c0-8.8 7.2-16 16-16z" fill="#FFB6C1" p-id="2283"></path>
+                    </svg>
+                    B站主页
+                </a>
+                <a href="https://user.qzone.qq.com/2598054322/main?_t_=0.44104223867010683" target="_blank" style="color: #fff; text-decoration: none; display: flex; align-items: center; gap: 5px;">
+                    <svg t="1640000000000" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3300" width="20" height="20">
+                        <path d="M512 0C229.2 0 0 229.2 0 512s229.2 512 512 512 512-229.2 512-512S794.8 0 512 0z" fill="#FFD700" p-id="3301"></path>
+                        <path d="M344 344h336v336H344z" fill="#FFFFFF" p-id="3302"></path>
+                        <path d="M344 344v336m336-336v336" stroke="#FFD700" stroke-width="40" p-id="3303"></path>
+                    </svg>
+                    QQ空间
+                </a>
+            </div>
+            <p style="font-size: 0.9rem; color: #aaa; margin-top: 10px;">欢迎来玩～</p>
+        </div>
+    </footer>
+
+</body>
+</html>
